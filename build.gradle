@@ -1,0 +1,77 @@
+/**
+ * Copyright (C) 2018 thinh ho
+ * This file is part of 'qrmi' which is released under the MIT license.
+ * See LICENSE at the project root directory.
+ */
+
+buildscript {
+   repositories { 
+      mavenCentral()
+      maven {
+         url 'https://github.com/kkdt/mavenrepo/raw/master'
+      }
+   }
+   dependencies {
+      classpath "kkdt.gradle.eclipseone:eclipseone:0.5"
+   }
+}
+
+
+description = 'qrmi'
+
+apply plugin: 'java-library'
+apply plugin: 'eclipse'
+apply plugin: 'kkdt.gradle.eclipseone'
+
+eclipse {
+   classpath {
+      downloadJavadoc = true
+      downloadSources = true
+   }
+   
+   project {
+      resourceFilter {
+         appliesTo = 'FOLDERS'
+         type = 'EXCLUDE_ALL'
+         matcher {
+           id = 'org.eclipse.ui.ide.multiFilter'
+           arguments = '1.0-name-matches-false-false-build'
+         }
+       }
+   }
+}
+
+allprojects { project ->
+    version = '0.1'
+    group = 'qrmi'
+    version = rootProject.version
+   
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
+subprojects { p ->
+    apply plugin: 'java'
+   
+    jar {
+        manifest {
+            attributes(
+                "Name": p.name,
+                "Specification-Title": "qrmi",
+                "Specification-Version": p.version,
+                "Specification-Vendor": "qrmi",
+                "Implementation-Title": p.name,
+                "Implementation-Version": p.version,
+                "Implementation-Vendor": "me@kkdt.one"
+            )
+        }
+    }
+}
+
+// the root project does not have any build artifacts
+build.doLast {
+   delete buildDir
+}
+

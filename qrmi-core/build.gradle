@@ -1,0 +1,17 @@
+/**
+ * Copyright (C) 2018 thinh ho
+ * This file is part of 'qrmi' which is released under the MIT license.
+ * See LICENSE at the project root directory.
+ */
+
+description = 'qrmi - Core library'
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-amqp:${amqpStarterVersion}") {
+        exclude module:'spring-boot-starter-tomcat'
+        exclude module:'spring-boot-starter-logging'
+    }
+    runtime("org.springframework.boot:spring-boot-starter-log4j2:${amqpStarterVersion}")
+    
+    testImplementation 'junit:junit:4.12'
+}
