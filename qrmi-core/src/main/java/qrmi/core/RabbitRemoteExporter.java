@@ -15,6 +15,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
@@ -82,6 +83,12 @@ public class RabbitRemoteExporter {
         Assert.notNull(exchange, "Must provide an Exchange");
         Assert.notNull(queue, "Must provide a Queue");
         Assert.notNull(connectionFactory, "Must provide Connection Factory");
+        
+        if(exchange.getType() != null 
+            && !(ExchangeTypes.DIRECT.equals(exchange.getType()) || ExchangeTypes.TOPIC.equals(exchange.getType()))) 
+        {
+            throw new IllegalArgumentException(String.format("%s not support - only DIRECT and TOPIC exchanges are supported", exchange.getType()));
+        }
         
         if(Objects.nonNull(key) && key.length > 0) {
             Stream.of(key).forEach(k -> declareBinding(exchange, queue, k));

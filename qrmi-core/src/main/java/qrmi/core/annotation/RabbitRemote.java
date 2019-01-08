@@ -48,7 +48,7 @@ public @interface RabbitRemote {
     Class<?> remoteInterface();
     
     /**
-     * The queue-exchange binding.
+     * The queue-exchange binding. Only DIRECT and TOPIC exchanges are supported.
      * 
      * @return
      */
