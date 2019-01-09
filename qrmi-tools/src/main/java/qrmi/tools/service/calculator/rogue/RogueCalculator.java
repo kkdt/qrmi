@@ -47,4 +47,9 @@ public class RogueCalculator implements Calculator {
         return result;
     }
 
+    @Override
+    public void compute(double a) {
+        logger.info(String.format("(Rogue) Calculator received compute"));
+    }
+
 }

@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
-import qrmi.core.RabbitRemoteConfiguration;
+import qrmi.core.RabbitObjectsConfiguration;
 import qrmi.tools.api.Calculator;
 
 /**
@@ -24,7 +24,7 @@ import qrmi.tools.api.Calculator;
  * separate application. This application configuration will use the <code>RogueCalculator</code>.
  * 
  * <p>
- * The key line is the import of {@code RabbitRemoteConfiguration} so that it
+ * The key line is the import of {@code RabbitObjectsConfiguration} so that it
  * automatically load up <code>RabbitRemote</code> to RabbitMQ.
  * </p>
  * 
@@ -32,7 +32,7 @@ import qrmi.tools.api.Calculator;
  *
  */
 @Configuration
-@Import(value = {RabbitRemoteConfiguration.class})
+@Import(value = {RabbitObjectsConfiguration.class})
 public class RogueCalculatorConfiguration implements ApplicationRunner {
     
     Logger logger = LoggerFactory.getLogger(RogueCalculatorConfiguration.class);

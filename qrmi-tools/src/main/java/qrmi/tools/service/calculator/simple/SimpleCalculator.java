@@ -56,4 +56,9 @@ public class SimpleCalculator implements Calculator {
         return result;
     }
 
+    @Override
+    public void compute(double a) {
+        logger.info(String.format("Service %s received compute(%s)", id, a));
+    }
+
 }

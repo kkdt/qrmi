@@ -37,13 +37,12 @@ public class CalculatorAccessConfiguration {
     
     @Bean
     public RabbitRemoteLocator calculator() {
-        RabbitRemoteLocator remoteLocator = new RabbitRemoteLocator(connectionFactory);
+        RabbitRemoteLocator remoteLocator = new RabbitRemoteLocator(amqpAdmin, connectionFactory);
         // 
         remoteLocator.setServiceInterface(Calculator.class);
         remoteLocator.setRoutingKey(Calculator.class.getName());
         remoteLocator.setExchange("example.Calculator");
         // 
-        remoteLocator.setAmqpAdmin(amqpAdmin);
         remoteLocator.setReplyTimeout(3000L);
         remoteLocator.setReplyExchange("qrmi.reply");
         remoteLocator.setReplyQueueNamingStrategy(() -> String.format("qrmi.%s.%s", applicationId, UUID.randomUUID().toString()));

@@ -73,6 +73,7 @@ public class CalculatorWorker implements InitializingBean {
             Double x = Integer.valueOf(rand.nextInt(max)).doubleValue();
             Double y = Integer.valueOf(rand.nextInt(max)).doubleValue();
             try {
+                calculator.compute(x);
                 CalculatorResult z = calculator.add(x, y);
                 if(z != null) {
                     doLater.accept(area, String.format("Received: add(%s, %s)\t= %s\tfrom %s", x, y, z.getValue(), z.getSource()));

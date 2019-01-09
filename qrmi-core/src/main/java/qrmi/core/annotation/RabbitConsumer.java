@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2018 thinh ho
+/** 
+ * Copyright (C) 2019 thinh ho
  * This file is part of 'qrmi' which is released under the MIT license.
  * See LICENSE at the project root directory.
  */
@@ -15,12 +15,8 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>RabbitRemote</code> identifies API implementations that may be invoked
- * on RabbitMQ.
- * 
- * <p>
- * APIs can be request-response style or has a <code>void</code> method signature.
- * </p>
+ * The <code>RabbitConsumer</code> identifies pub/sub-based API implementations 
+ * that may be invoked on RabbitMQ.
  * 
  * @author thinh ho
  *
@@ -29,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface RabbitRemote {
+public @interface RabbitConsumer {
     /**
      * Service name to be used for look up.
      * 
@@ -43,7 +39,6 @@ public @interface RabbitRemote {
      * @return
      */
     String description() default "";
-    
     /**
      * Identify the interface/api if the implementation satisfies multiple.
      * 
@@ -52,7 +47,12 @@ public @interface RabbitRemote {
     Class<?> remoteInterface();
     
     /**
-     * The queue-exchange binding. Only DIRECT and TOPIC exchanges are supported.
+     * The queue-exchange binding. 
+     * 
+     * <p>
+     * Only DIRECT and TOPIC exchanges are supported. All messages will be published 
+     * to this exchange with the specified {@link #key()}(s), if specified.
+     * </p>
      * 
      * @return
      */

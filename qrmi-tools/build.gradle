@@ -22,4 +22,6 @@ apply plugin: 'spring-boot'
 
 dependencies {
     compile project (':qrmi-core')
+//    compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
+    
 }
