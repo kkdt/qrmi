@@ -4,6 +4,24 @@
 
 The goal of this project is to provide service discovery over RabbitMQ using Spring AMQP/RabbitMQ libraries.
 
+## Why RabbitMQ?
+
+1. RabbitMQ provides load balancing, clustering, mirroring capability
+2. Can be configured for high throughput and high availability
+3. STOMP plugin to support web clients
+4. CLI, REST API, and Java libraries for broker management
+
+## Service Discovery
+
+Analogous to an RMI-based implementation, RabbitMQ will be the registry where services can publish their APIs for other services/clients to consume. The registry will provide the following high-level capabilities.
+
+1. Service/API lookup
+2. Listing APIs
+3. Register an API
+4. Registry holds metadata that will allow consumer to bind to a remote API
+
+RabbitMQ will facilitate the routing and the communication infrastructure. One of the goal is to make the best attempt to keep communication logic decoupled from the application logic. 
+
 # Initial Thoughts
 
 1. Java RMI registry design/pattern
@@ -33,6 +51,8 @@ The goal of this project is to provide service discovery over RabbitMQ using Spr
 10. Logging support
 
 11. Unit testing
+
+12. Security
 
 # qrmi-core
 
