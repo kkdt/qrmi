@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
-import qrmi.core.RabbitObjectsConfiguration;
+import qrmi.core.RabbitExportConfiguration;
 import qrmi.tools.api.Calculator;
 
 /**
@@ -32,7 +32,7 @@ import qrmi.tools.api.Calculator;
  *
  */
 @Configuration
-@Import(value = {RabbitObjectsConfiguration.class})
+@Import(value = {RabbitExportConfiguration.class})
 public class SimpleCalculatorService implements ApplicationRunner {
     
     Logger logger = LoggerFactory.getLogger(SimpleCalculatorService.class);

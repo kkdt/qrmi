@@ -8,10 +8,10 @@ package qrmi.tools.service.lottery.consumer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import qrmi.core.RabbitObjectsConfiguration;
+import qrmi.core.RabbitExportConfiguration;
 
 @Configuration
-@Import(value = {RabbitObjectsConfiguration.class})
+@Import(value = {RabbitExportConfiguration.class})
 public class LotteryConsumerConfiguration {
 
 }

@@ -22,6 +22,14 @@ Analogous to an RMI-based implementation, RabbitMQ will be the registry where se
 
 RabbitMQ will facilitate the routing and the communication infrastructure. One of the goal is to make the best attempt to keep communication logic decoupled from the application logic. 
 
+## API-Enforced Rabbit Interfaces
+
+To facilitate service discovery, communication over RabbitMQ will be enforced by APIs. There are "exporter" classes and "locator" classes in `qrmi-core` project.
+
+* Exporter binds an API to RabbitMQ, attaching the underlying implementation.
+
+* Locator look up an API on RabbitMQ, returning a stub/proxy of the interface for remote access.
+
 # Initial Thoughts
 
 1. Java RMI registry design/pattern
@@ -57,6 +65,10 @@ RabbitMQ will facilitate the routing and the communication infrastructure. One o
 # qrmi-core
 
 Main supporting library for this project.
+
+# qrmi
+
+The service discovery server that can be deployed and run against a broker. This is analogous to executing `rmiregsitry &`.
 
 # qrmi-tools
 

@@ -1,11 +1,12 @@
 /**
- * Copyright (C) 2018 thinh ho
+ * Copyright (C) 2019 thinh ho
  * This file is part of 'qrmi' which is released under the MIT license.
  * See LICENSE at the project root directory.
  */
 
-rootProject.name = 'qrmi'
+description = 'qrmi'
 
-include 'qrmi-core'
-include 'qrmi-tools'
-include 'qrmi'
+dependencies {
+    compile project (':qrmi-core')
+    
+}
