@@ -10,66 +10,10 @@ Vagrant.configure("2") do |config|
     # For a complete reference, please see the online documentation at
     # https://docs.vagrantup.com.
     
+    config.vm.box = "geerlingguy/centos7"
+    
     config.ssh.forward_x11 = true
 
-    # Every Vagrant development environment requires a box. You can search for
-    # boxes at https://vagrantcloud.com/search.
-    config.vm.box = "geerlingguy/centos7"
-    config.vm.define "qrmi"
-    config.vm.hostname = "qrmi"
-
-    # Disable automatic box update checking. If you disable this, then
-    # boxes will only be checked for updates when the user runs
-    # `vagrant box outdated`. This is not recommended.
-    # config.vm.box_check_update = false
-
-    # Create a forwarded port mapping which allows access to a specific port
-    # within the machine from a port on the host machine. In the example below,
-    # accessing "localhost:8080" will access port 80 on the guest machine.
-    # NOTE: This will enable public access to the opened port
-    config.vm.network "forwarded_port", guest: 5672, host: 6859
-    config.vm.network "forwarded_port", guest: 15672, host: 6858
-
-    # Create a forwarded port mapping which allows access to a specific port
-    # within the machine from a port on the host machine and only allow access
-    # via 127.0.0.1 to disable public access
-    # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-
-    # Create a private network, which allows host-only access to the machine
-    # using a specific IP.
-    config.vm.network "private_network", ip: "10.10.1.2"
-
-    # Create a public network, which generally matched to bridged network.
-    # Bridged networks make the machine appear as another physical device on
-    # your network.
-    # config.vm.network "public_network"
-
-    # Share an additional folder to the guest VM. The first argument is
-    # the path on the host to the actual folder. The second argument is
-    # the path on the guest to mount the folder. And the optional third
-    # argument is a set of non-required options.
-    # config.vm.synced_folder "../data", "/vagrant_data"
-
-    # Provider-specific configuration so you can fine-tune various
-    # backing providers for Vagrant. These expose provider-specific options.
-    # Example for VirtualBox:
-    #
-    config.vm.provider "virtualbox" do |vb|
-        # Display the VirtualBox GUI when booting the machine
-        # vb.gui = true
-        vb.name = "qrmi"
-    
-        # Customize the amount of memory on the VM:
-        vb.memory = "1024"
-    end
-    
-    # View the documentation for the provider you are using for more
-    # information on available options.
-
-    # Enable provisioning with a shell script. Additional provisioners such as
-    # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-    # documentation for more information about their specific syntax and use.
-    
     config.vm.provision "bootstrap", type: "shell", inline: <<-SHELL
         echo "Updating base"
         sudo yum -y update
@@ -78,7 +22,7 @@ Vagrant.configure("2") do |config|
         sudo yum -y install epel-release
         
         echo "Installing system utilities"
-        sudo yum -y install pciutils
+        sudo yum -y install pciutils traceroute
         sudo yum -y install policycoreutils policycoreutils-python
         sudo yum -y install wget unzip
         sudo yum -y install mlocate unzip
@@ -87,18 +31,63 @@ Vagrant.configure("2") do |config|
         sudo yum -y update
     SHELL
     
-    config.vm.provision "rabbitmq", type: "shell", inline: <<-SHELL
-        echo "Installing RabbitMQ"
-        sudo yum -y install rabbitmq-server
-        
-        echo "Enabling RabbitMQ Management Plugin"
-        rabbitmq-plugins enable rabbitmq_management
-        
-        echo "Starting up rabbitmq-server"
-        sudo systemctl start rabbitmq-server
-        
-        echo "Setting up virtual host: qrmi"
-        rabbitmqctl add_vhost qrmi
-        rabbitmqctl set_permissions -p qrmi guest ".*" ".*" ".*"
-    SHELL
+    Dir.glob('servers/*.json') do |file|
+        json = (JSON.parse(File.read(file)))['server']
+        id = json['id']
+        hostname = json['hostname']
+        memory = json['memory']
+        cpus = json['cpus']
+        network = json['network']
+        rabbit = json['rabbitmq']
+
+        config.vm.define id do |server|
+            server.vm.hostname = hostname
+            server.vm.define id
+
+            server.vm.provider "virtualbox" do |vb|
+                vb.gui = false
+                vb.name = id
+                vb.cpus = cpus
+                # Customize the amount of memory
+                vb.memory = memory
+            end
+
+            # contains a list of possible bridge adapters and the first one to successfully
+            # bridged will be used
+            server.vm.network network['type'], ip: network['ip'], bridge: network['bridge']
+
+            network['ports'].each do |p|
+                server.vm.network "forwarded_port", guest: p['guest'], host: p['host']
+            end
+            
+            network['hosts'].each do |h|
+                hostname = h["hostname"]
+                ip = h["ip"]
+                server.vm.provision "hosts", type: "shell", args: [ hostname, ip ], inline: <<-SHELL
+                    echo "$2 $1 $1" >> /etc/hosts
+                SHELL
+            end
+            
+            config.vm.provision "rabbitmq", type: "shell", args: [rabbit["vhost"]], inline: <<-SHELL
+                echo "Installing RabbitMQ"
+                sudo yum -y install rabbitmq-server
+            
+                echo "Enabling RabbitMQ Management Plugin"
+                rabbitmq-plugins enable rabbitmq_management
+                
+                # firewall is off for Vagrant
+                #echo "Configuring RabbitMQ firewalls"
+                #sudo firewall-cmd --zone=public --add-port=5672/tcp --permanent
+                #sudo firewall-cmd --zone=public --add-port=15672/tcp --permanent
+                #sudo firewall-cmd --reload
+            
+                echo "Starting up rabbitmq-server"
+                sudo systemctl start rabbitmq-server
+            
+                echo "Setting up virtual host: $1"
+                rabbitmqctl add_vhost $1
+                rabbitmqctl set_permissions -p $1 guest ".*" ".*" ".*"
+            SHELL
+        end
+    end
 end

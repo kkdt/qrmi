@@ -123,5 +123,17 @@ The Lottery example involves an API (`qrmi.tools.api.Lottery`) that is a pub/sub
 
 # Vagrant
 
-* RabbitMQ default port `5672` (on host machine `6859`)
-* RabbitMQ Management port `15672` (on host machine `6858`)
+Vagrant has two configured VMs:
+
+1. qrmi1 with broker vhost `qrmiBroker1` (all tools are configured to use this for now)
+
+    * RabbitMQ default port `5672` (on host machine `6859`)
+    
+    * RabbitMQ Management port `15672` (on host machine `6858`)
+
+2. qrmi2 with broker vhost `qrmiBroker2`
+
+    * RabbitMQ default port `5672` (on host machine `7859`)
+    
+    * RabbitMQ Management port `15672` (on host machine `7858`)
+

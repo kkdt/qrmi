@@ -1,0 +1,37 @@
+{
+    "server": {
+        "id" : "qrmi1",
+        "hostname": "qrmi1",
+        "memory": 512,
+        "cpus": 1,
+        "rabbitmq": {
+            "vhost": "qrmiBroker1"
+        },
+        "network" : {
+            "type" : "private_network",
+            "ip" : "10.10.1.2",
+            "bridge" : [
+                "eth0",
+                "eth1",
+                "eth2",
+                "eth3",
+                "en1: Thunderbolt 1",
+                "en2: Thunderbolt 1",
+                "en0: Wi-Fi (AirPort)"
+            ],
+            "ports" : [
+                {
+                    "host": 6859,
+                    "guest": 5672
+                },
+                {
+                    "host": 6858,
+                    "guest": 15672
+                }
+            ],
+            "hosts": [
+                {"hostname":"qrmi2", "ip":"10.10.1.3"}
+            ]
+        }
+    }
+}
