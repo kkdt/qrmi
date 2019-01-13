@@ -1,12 +1,22 @@
 # qrmi
 
+> This is a prototype that explores RabbitMQ, microservices, and service discovery.
+
 # Overview
 
 The goal of this project is to provide service discovery over RabbitMQ using Spring AMQP/RabbitMQ libraries.
 
+## References
+
+1. https://www.rabbitmq.com/tutorials/amqp-concepts.html
+
+2. https://insidethecpu.com/2014/11/17/load-balancing-a-rabbitmq-cluster/
+
+3. https://www.nginx.com/blog/service-discovery-in-a-microservices-architecture/
+
 ## Why RabbitMQ?
 
-1. RabbitMQ provides load balancing, clustering, mirroring capability
+1. RabbitMQ provides consumer-level load balancing, node clustering, and queue mirroring capability
 2. Can be configured for high throughput and high availability
 3. STOMP plugin to support web clients
 4. CLI, REST API, and Java libraries for broker management
