@@ -14,12 +14,16 @@ The goal of this project is to provide service discovery over RabbitMQ using Spr
 
 3. https://www.nginx.com/blog/service-discovery-in-a-microservices-architecture/
 
+4. https://www.rabbitmq.com/cluster-formation.html
+
 ## Why RabbitMQ?
 
-1. RabbitMQ provides consumer-level load balancing, node clustering, and queue mirroring capability
-2. Can be configured for high throughput and high availability
-3. STOMP plugin to support web clients
-4. CLI, REST API, and Java libraries for broker management
+1. Consumer-level load balancing
+2. Node clustering and peer discovery
+3. Queue mirroring
+4. Can be configured for high throughput and high availability
+5. STOMP plugin to support web clients
+6. CLI, REST API, and Java libraries for broker management
 
 ## Service Discovery
 

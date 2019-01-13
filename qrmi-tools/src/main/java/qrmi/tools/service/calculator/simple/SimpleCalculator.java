@@ -19,6 +19,14 @@ import qrmi.core.annotation.RabbitRemote;
 import qrmi.tools.api.Calculator;
 import qrmi.tools.api.CalculatorResult;
 
+/**
+ * The queue/exchange binding is set to not auto delete so that if the server 
+ * dies and restarts, then the client connection can pick back up using Spring
+ * AMQP library.
+ * 
+ * @author thinh ho
+ *
+ */
 @RabbitRemote(
     name = "Calculator",
     description = "Calculator (simple) API, author: Thinh Ho",
@@ -26,13 +34,13 @@ import qrmi.tools.api.CalculatorResult;
     binding = @QueueBinding(
         exchange = @Exchange(
             name = "example.Calculator",
-            autoDelete = Exchange.TRUE,
+            autoDelete = Exchange.FALSE,
             declare = Exchange.TRUE,
             durable = Exchange.TRUE,
             type = ExchangeTypes.DIRECT),
         value = @Queue(
             name = "example.Calculator_queue",
-            autoDelete = Exchange.TRUE,
+            autoDelete = Exchange.FALSE,
             declare = Exchange.TRUE,
             durable = Exchange.TRUE,
             exclusive = Exchange.FALSE),
