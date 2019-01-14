@@ -38,6 +38,8 @@ public abstract class RabbitExporter {
     private final DirectRabbitListenerContainerFactory listenerContainerFactory = new DirectRabbitListenerContainerFactory();
     private DirectMessageListenerContainer container;
     
+    public String name;
+    public String description;
     public ApplicationContext applicationContext;
     public AmqpAdmin amqpAdmin;
     public ConnectionFactory connectionFactory;

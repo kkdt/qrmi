@@ -54,6 +54,8 @@ public class RabbitExporterBuilder {
         
         // bind the remote API to rabbit
         return new RabbitRemoteExporter()
+            .with(r -> r.name = ann.name())
+            .with(r -> r.description = ann.description())
             .with(r -> r.applicationContext = applicationContext)
             .with(r -> r.amqpAdmin = amqpAdmin)
             .with(r -> r.connectionFactory = connectionFactory)
@@ -118,6 +120,8 @@ public class RabbitExporterBuilder {
         Assert.notNull(ann, "RabbitConsumer annotation cannot be null");
         
         return new RabbitConsumerExporter()
+            .with(r -> r.name = ann.name())
+            .with(r -> r.description = ann.description())
             .with(r -> r.applicationContext = applicationContext)
             .with(r -> r.amqpAdmin = amqpAdmin)
             .with(r -> r.connectionFactory = connectionFactory)
