@@ -12,6 +12,13 @@ package qrmi.tools.api;
  *
  */
 public interface Calculator {
+    /**
+     * Add two numeric values.
+     * 
+     * @param a
+     * @param b
+     * @return
+     */
     CalculatorResult add(Double a, Double b);
     /**
      * No response method signature.

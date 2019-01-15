@@ -18,6 +18,7 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.ConsumerTagStrategy;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 
 import qrmi.core.annotation.RabbitConsumer;
@@ -46,6 +47,29 @@ public class RabbitExporterBuilder {
     public RabbitExporterBuilder with(Consumer<RabbitExporterBuilder> b) {
         b.accept(this);
         return this;
+    }
+    
+    /**
+     * Detect whether or not the provided object can be exported and return the 
+     * appropriate {@code RabbitExporter}.
+     * 
+     * @param obj
+     * @return the {@code RabbitExporter} or null.
+     */
+    public RabbitExporter build(Object obj) {
+        Assert.notNull(obj, "Bean of type RabbitRemote cannot be null");
+        
+        RabbitRemote remote = AnnotationUtils.findAnnotation(obj.getClass(), RabbitRemote.class);
+        if(remote != null) {
+            return this.build(remote, obj);
+        }
+        
+        RabbitConsumer consumer = AnnotationUtils.findAnnotation(obj.getClass(), RabbitConsumer.class);
+        if(consumer != null) {
+            return this.build(remote, obj);
+        }
+        
+        return null;
     }
     
     public RabbitExporter build(RabbitRemote ann, Object obj) {
