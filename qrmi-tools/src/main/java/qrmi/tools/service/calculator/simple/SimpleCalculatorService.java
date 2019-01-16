@@ -5,19 +5,20 @@
  */
 package qrmi.tools.service.calculator.simple;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.UUID;
+
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.env.Environment;
 
+import qrmi.api.QRMIRegistryAware;
+import qrmi.api.QRMIRegistry;
+import qrmi.core.RabbitConsumerLocator;
 import qrmi.core.RabbitExportConfiguration;
-import qrmi.tools.api.Calculator;
+import qrmi.core.RabbitRemoteLocator;
 
 /**
  * Nothing special here but a configuration to let <code>QRMITool</code> run as a
@@ -33,79 +34,34 @@ import qrmi.tools.api.Calculator;
  */
 @Configuration
 @Import(value = {RabbitExportConfiguration.class})
-public class SimpleCalculatorService implements ApplicationRunner {
+public class SimpleCalculatorService {
     
-    Logger logger = LoggerFactory.getLogger(SimpleCalculatorService.class);
-    
-    @Autowired(required = true)
-    private Environment environment;
-    
-    @Autowired(required = true)
-    private Calculator calculator;
-    
-    @Autowired(required = true)
+    @Autowired
     private AmqpAdmin amqpAdmin;
     
-    @Autowired(required = true)
+    @Autowired
     private ConnectionFactory connectionFactory;
     
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-        logger.info("Application: " + environment.getProperty("qrmi.px"));
-        logger.info("Calculator: " + calculator);
-        logger.info("AmqpAdmin: " + amqpAdmin);
-        logger.info("ConnectionFactory: " + connectionFactory);
-        
-//        TopicExchange replyExchange = new TopicExchange("qrmi.reply", false, false);
-//        String replyQueue = new Base64UrlNamingStrategy("qrmi.CalculatorClient.").generateName();
-//        Queue queue = new Queue(replyQueue, false, true, true);
-//        amqpAdmin.declareExchange(replyExchange);
-//        amqpAdmin.declareQueue(queue);
-//        Binding b = BindingBuilder
-//            .bind(queue)
-//            .to(replyExchange)
-//            .with(replyQueue);
-//        amqpAdmin.declareBinding(b);
-//        
-//        RabbitTemplate template = new RabbitTemplate(connectionFactory);
-//        template.setExchange("example.Calculator");
-////        template.setRoutingKey(Calculator.class.getName());
-//        template.setReplyAddress(String.format("%s/%s", replyExchange.getName(), replyQueue));
-//        template.setReceiveTimeout(-1);
-//        
-//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory);
-//        container.setQueues(queue);
-//        container.setAmqpAdmin(amqpAdmin);
-//        container.setMessageListener(template);
-//        container.start();
-//        
-//        AmqpProxyFactoryBean factoryBean = new AmqpProxyFactoryBean();
-//        factoryBean.setServiceInterface(Calculator.class);
-//        factoryBean.setAmqpTemplate(template);
-//        factoryBean.setRoutingKey(Calculator.class.getName());
-//        factoryBean.afterPropertiesSet();
-//        Calculator client = (Calculator)factoryBean.getObject();
-//        final Random rand = new Random();
-//        
-//        Runnable r = () -> {
-//            while(true) {
-//                try {
-//                    double x = rand.nextDouble();
-//                    double y = rand.nextDouble();
-//                    logger.info(String.format("Sending add(%s,%s)", x, y));
-//                    double z = client.add(x, y);
-//                    logger.info(String.format("add(%s,%s) = %s", x, y, z));
-//                } catch (Throwable t) {
-//                    logger.error("Cannot invoke api", t);
-//                }
-//                try {
-//                    Thread.sleep(2000L);
-//                } catch (Exception e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        new Thread(r, "RandomAdd").start();
+    @Bean
+    public RabbitRemoteLocator registry() {
+        RabbitRemoteLocator remoteLocator = new RabbitRemoteLocator(amqpAdmin, connectionFactory);
+        // 
+        remoteLocator.setServiceInterface(QRMIRegistry.class);
+        remoteLocator.setRoutingKey(QRMIRegistry.class.getName());
+        remoteLocator.setExchange("qrmi.service.registry");
+        // 
+        remoteLocator.setReplyTimeout(3000L);
+        remoteLocator.setReplyExchange("qrmi.reply");
+        remoteLocator.setReplyQueueNamingStrategy(() -> String.format("qrmi.%s.%s", SimpleCalculatorService.class.getSimpleName(), UUID.randomUUID().toString()));
+        return remoteLocator;
+    }
+    
+    @Bean
+    public RabbitConsumerLocator registryBroadcast() {
+        RabbitConsumerLocator l = new RabbitConsumerLocator(amqpAdmin, connectionFactory);
+        l.setServiceInterface(QRMIRegistryAware.class);
+        l.setExchange("qrmi.service.available");
+        l.setRoutingKey(QRMIRegistryAware.class.getName());
+        return l;
     }
 }

@@ -1,34 +1,22 @@
-/** 
- * Copyright (C) 2019 thinh ho
- * This file is part of 'qrmi' which is released under the MIT license.
+/*
+ * Copyright (c) 2019. thinh ho
+ * This file is part of 'qrmi-tools_main' which is released under the MIT license.
  * See LICENSE at the project root directory.
  */
-package qrmi.tools.client.calculator;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.Random;
-import java.util.concurrent.CyclicBarrier;
-import java.util.function.BiConsumer;
-
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.text.DefaultCaret;
+package qrmi.tools.client.ui;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import qrmi.tools.api.Calculator;
 import qrmi.tools.api.CalculatorResult;
+
+import javax.swing.*;
+import javax.swing.text.DefaultCaret;
+import java.awt.*;
+import java.util.Random;
+import java.util.concurrent.CyclicBarrier;
+import java.util.function.BiConsumer;
 
 /**
  * Exposing this as a <code>Component</code> so that Spring Boot automatically 
@@ -43,24 +31,15 @@ import qrmi.tools.api.CalculatorResult;
  *
  */
 @Component
-public class CalculatorWorker implements InitializingBean {
+public class CalculatorWorker extends UIWorker implements InitializingBean {
     
-    @Autowired(required = true)
+    @Autowired
     private Calculator calculator;
-    
-    /**
-     * Add text to text area.
-     */
-    private BiConsumer<JTextArea, String> doLater = (area, text) -> {
-        SwingUtilities.invokeLater(() -> {
-            area.append(String.format("%s\n", text));
-        });
-    };
     
     /**
      * Invoke the Calculator API in a separate thread.
      */
-    private BiConsumer<JTextArea, CyclicBarrier> invokeCalculator = (area,b) -> {
+    private BiConsumer<JTextArea, CyclicBarrier> invokeCalculator = (area,b) ->
         new Thread(() -> {
             try {
                 b.await();
@@ -84,7 +63,6 @@ public class CalculatorWorker implements InitializingBean {
                 doLater.accept(area, String.format("Encountered exception: %s, %s", e.getClass().getName(), e.getMessage()));
             }
         }).start();
-    };
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -110,7 +88,7 @@ public class CalculatorWorker implements InitializingBean {
         contents.add(pane, BorderLayout.CENTER);
         
         JFrame frame = new JFrame("Calculator Client");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setContentPane(contents);
         frame.setVisible(true);
         frame.pack();
@@ -119,7 +97,7 @@ public class CalculatorWorker implements InitializingBean {
         btn.addActionListener(event -> {
             String input = workersInput.getText();
             if(!input.isEmpty()) {
-                int count = 0;
+                int count;
                 try {
                     count = Integer.parseInt(input);
                 } catch (Exception e) {

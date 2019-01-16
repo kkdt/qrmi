@@ -5,9 +5,6 @@
  */
 package qrmi.core;
 
-import java.util.UUID;
-import java.util.function.Consumer;
-
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.ExchangeTypes;
@@ -20,9 +17,11 @@ import org.springframework.amqp.support.ConsumerTagStrategy;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
-
 import qrmi.core.annotation.RabbitConsumer;
 import qrmi.core.annotation.RabbitRemote;
+
+import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Builds {@code RabbitExporter} from an annotation and the annotated bean.
@@ -31,8 +30,8 @@ import qrmi.core.annotation.RabbitRemote;
  *
  */
 public class RabbitExporterBuilder {
-    private final AmqpAdmin amqpAdmin;
-    private final ConnectionFactory connectionFactory;
+    protected final AmqpAdmin amqpAdmin;
+    protected final ConnectionFactory connectionFactory;
     
     public ApplicationContext applicationContext;
     public ConsumerTagStrategy consumerTagStrategy;
@@ -66,7 +65,7 @@ public class RabbitExporterBuilder {
         
         RabbitConsumer consumer = AnnotationUtils.findAnnotation(obj.getClass(), RabbitConsumer.class);
         if(consumer != null) {
-            return this.build(remote, obj);
+            return this.build(consumer, obj);
         }
         
         return null;
@@ -91,9 +90,9 @@ public class RabbitExporterBuilder {
                 Queue q = binding.value();
                 org.springframework.amqp.core.Queue queue = 
                     new org.springframework.amqp.core.Queue(q.name(), 
-                        Boolean.valueOf(q.durable()).booleanValue(),
-                        Boolean.valueOf(q.exclusive()).booleanValue(), 
-                        Boolean.valueOf(q.autoDelete()).booleanValue());
+                        Boolean.valueOf(q.durable()),
+                        Boolean.valueOf(q.exclusive()),
+                        Boolean.valueOf(q.autoDelete()));
                 r.queue = queue;
                 
                 switch(q.declare()) {
@@ -110,13 +109,13 @@ public class RabbitExporterBuilder {
                 switch(e.type()) {
                 case ExchangeTypes.TOPIC:
                     exchange = new TopicExchange(e.name(), 
-                        Boolean.valueOf(e.durable()).booleanValue(), 
-                        Boolean.valueOf(e.autoDelete()).booleanValue());
+                        Boolean.valueOf(e.durable()),
+                        Boolean.valueOf(e.autoDelete()));
                     break;
                 default:
                     exchange = new DirectExchange(e.name(), 
-                        Boolean.valueOf(e.durable()).booleanValue(), 
-                        Boolean.valueOf(e.autoDelete()).booleanValue());
+                        Boolean.valueOf(e.durable()),
+                        Boolean.valueOf(e.autoDelete()));
                     break;
                 }
                 r.exchange = exchange;
@@ -157,9 +156,9 @@ public class RabbitExporterBuilder {
                 Queue q = binding.value();
                 org.springframework.amqp.core.Queue queue = 
                     new org.springframework.amqp.core.Queue(q.name(), 
-                        Boolean.valueOf(q.durable()).booleanValue(),
-                        Boolean.valueOf(q.exclusive()).booleanValue(), 
-                        Boolean.valueOf(q.autoDelete()).booleanValue());
+                        Boolean.valueOf(q.durable()),
+                        Boolean.valueOf(q.exclusive()),
+                        Boolean.valueOf(q.autoDelete()));
                 r.queue = queue;
                 
                 switch(q.declare()) {
@@ -176,13 +175,13 @@ public class RabbitExporterBuilder {
                 switch(e.type()) {
                 case ExchangeTypes.TOPIC:
                     exchange = new TopicExchange(e.name(), 
-                        Boolean.valueOf(e.durable()).booleanValue(), 
-                        Boolean.valueOf(e.autoDelete()).booleanValue());
+                        Boolean.valueOf(e.durable()),
+                        Boolean.valueOf(e.autoDelete()));
                     break;
                 default:
                     exchange = new DirectExchange(e.name(), 
-                        Boolean.valueOf(e.durable()).booleanValue(), 
-                        Boolean.valueOf(e.autoDelete()).booleanValue());
+                        Boolean.valueOf(e.durable()),
+                        Boolean.valueOf(e.autoDelete()));
                     break;
                 }
                 r.exchange = exchange;

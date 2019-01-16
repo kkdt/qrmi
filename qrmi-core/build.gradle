@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 thinh ho
+ * Copyright (C) 2019 thinh ho
  * This file is part of 'qrmi' which is released under the MIT license.
  * See LICENSE at the project root directory.
  */

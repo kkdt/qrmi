@@ -44,13 +44,13 @@ import qrmi.core.annotation.RabbitRemote;
 public class RabbitExportConfiguration implements ApplicationListener<ContextStoppedEvent>, InitializingBean {
     private static final Logger logger = LoggerFactory.getLogger(RabbitExportConfiguration.class);
     
-    @Autowired(required = true)
+    @Autowired
     private AmqpAdmin amqpAdmin;
     
-    @Autowired(required = true)
+    @Autowired
     private ConnectionFactory connectionFactory;
     
-    @Autowired(required = true)
+    @Autowired
     private ApplicationContext applicationContext;
     
     private Set<RabbitExporter> exported = new HashSet<>();

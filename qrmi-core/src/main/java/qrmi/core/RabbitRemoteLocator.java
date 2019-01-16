@@ -5,17 +5,11 @@
  */
 package qrmi.core;
 
-import java.util.Objects;
-
-import org.springframework.amqp.core.AmqpAdmin;
-import org.springframework.amqp.core.Base64UrlNamingStrategy;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.NamingStrategy;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+
+import java.util.Objects;
 
 /**
  * Locates an API exported to RabbitMQ.
@@ -96,7 +90,7 @@ public class RabbitRemoteLocator extends RabbitObjectLocator {
         }
         
         referenceTemplate.setReceiveTimeout(replyTimeout);
-        if(_replyExchange != null && _replyKey != null && _replyQueue != null) {
+        if(_replyExchange != null) {
             referenceTemplate.setReplyAddress(String.format("%s/%s", _replyExchange.getName(), _replyKey));
             
             // since the reply exchange and routing key are specified, create up a listener container for the template

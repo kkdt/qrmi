@@ -15,7 +15,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-
 import qrmi.core.RabbitExportConfiguration;
 import qrmi.tools.api.Calculator;
 
@@ -37,16 +36,16 @@ public class RogueCalculatorConfiguration implements ApplicationRunner {
     
     Logger logger = LoggerFactory.getLogger(RogueCalculatorConfiguration.class);
     
-    @Autowired(required = true)
+    @Autowired
     private Environment environment;
     
-    @Autowired(required = true)
+    @Autowired
     private Calculator calculator;
     
-    @Autowired(required = true)
+    @Autowired
     private AmqpAdmin amqpAdmin;
     
-    @Autowired(required = true)
+    @Autowired
     private ConnectionFactory connectionFactory;
     
     @Override

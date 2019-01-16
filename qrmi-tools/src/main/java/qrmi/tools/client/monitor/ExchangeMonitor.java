@@ -97,7 +97,7 @@ public class ExchangeMonitor implements ApplicationListener<MonitorExchangeEvent
                     invocation.getMethodName(),
                     Stream.of(invocation.getArguments()).map(Object::toString).collect(Collectors.toSet())));
             } else {
-                info.append(new String(_m.toString()));
+                info.append(_m.toString());
             }
             text.append(String.format("Message %s:\n%s %s\n\n", counter.incrementAndGet(), properties.toString(), info.toString()));
         });

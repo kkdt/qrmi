@@ -11,8 +11,9 @@ The Calculator example involves an API (`qrmi.tools.api.Calculator`) with both a
 ## Highlights
 
 1. Using the `@RabbitRemote` annotation to export the API to RabbitMQ.
-1. Load balancing is free with RabbitMQ which load balance messages between consumers - i.e. multiple instances of the API.
-2. It is possible for a "rogue" application to bind itself to the same exchange/routing key.
+2. Load balancing is free with RabbitMQ which load balance messages between consumers - i.e. multiple instances of the API.
+3. It is possible for a "rogue" application to bind itself to the same exchange/routing key.
+4. Demonstrates Service Registry interaction
 
 ## Commands
 
@@ -20,7 +21,7 @@ The Calculator example involves an API (`qrmi.tools.api.Calculator`) with both a
 
 `java -jar -Dqrmi.px=RogueCalcuator -Dqrmi.px.package=qrmi.tools.service.calculator.rogue qrmi-tools/build/libs/qrmi-tools-0.1.jar`
 
-`java -jar -Dqrmi.px=CalculatorClient1 -Dqrmi.px.package=qrmi.tools.client.calculator qrmi-tools/build/libs/qrmi-tools-0.1.jar`
+`java -jar -Dqrmi.px=Clients -Dqrmi.px.package=qrmi.tools.client.ui qrmi-tools/build/libs/qrmi-tools-0.1.jar`
 
 # Example 2: Lottery API
 

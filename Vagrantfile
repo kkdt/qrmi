@@ -22,10 +22,11 @@ Vagrant.configure("2") do |config|
         sudo yum -y install epel-release
         
         echo "Installing system utilities"
-        sudo yum -y install pciutils traceroute
-        sudo yum -y install policycoreutils policycoreutils-python
-        sudo yum -y install wget unzip
-        sudo yum -y install mlocate unzip
+        sudo yum -y install java-1.8.0-openjdk-headless.x86_64
+        #sudo yum -y install pciutils traceroute
+        #sudo yum -y install policycoreutils policycoreutils-python
+        #sudo yum -y install wget unzip
+        #sudo yum -y install mlocate unzip
         
         echo "Finalizing updates"
         sudo yum -y update

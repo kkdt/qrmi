@@ -5,20 +5,13 @@
  */
 package qrmi.tools.client.monitor;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Configuration;
+
+import javax.swing.*;
+import java.awt.*;
 
 @Configuration
 public class ExchangeMonitorConfiguration implements ApplicationContextAware {
@@ -39,7 +32,7 @@ public class ExchangeMonitorConfiguration implements ApplicationContextAware {
         
         frame.setLayout(new BorderLayout(5, 5));
         frame.add(inputs, BorderLayout.NORTH);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(450, 65));
         frame.setResizable(false);
         frame.pack();

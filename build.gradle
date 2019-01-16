@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 thinh ho
+ * Copyright (C) 2019 thinh ho
  * This file is part of 'qrmi' which is released under the MIT license.
  * See LICENSE at the project root directory.
  */
@@ -11,9 +11,6 @@ buildscript {
          url 'https://github.com/kkdt/mavenrepo/raw/master'
       }
    }
-   dependencies {
-      classpath "kkdt.gradle.eclipseone:eclipseone:0.5"
-   }
 }
 
 
@@ -21,7 +18,6 @@ description = 'qrmi'
 
 apply plugin: 'java-library'
 apply plugin: 'eclipse'
-apply plugin: 'kkdt.gradle.eclipseone'
 
 eclipse {
    classpath {
@@ -70,8 +66,4 @@ subprojects { p ->
     }
 }
 
-// the root project does not have any build artifacts
-build.doLast {
-   delete buildDir
-}
 

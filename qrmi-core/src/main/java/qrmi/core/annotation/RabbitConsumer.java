@@ -50,8 +50,7 @@ public @interface RabbitConsumer {
      * The queue-exchange binding. 
      * 
      * <p>
-     * Only DIRECT and TOPIC exchanges are supported. All messages will be published 
-     * to this exchange with the specified {@link #key()}(s), if specified.
+     * Only DIRECT and TOPIC exchanges are supported.
      * </p>
      * 
      * @return

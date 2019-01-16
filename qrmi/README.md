@@ -66,3 +66,9 @@ Some considerations
 
 4. The "locator" library or the Registry must be able to give priority to the closest API - i.e. if the API exists on multiple brokers including the broker where the request was made, then the broker instance where the request was made must be the one that is returned. 
 
+# Resources
+
+1. https://blog.stanko.io/supercharging-services-architectures-with-rabbitmq-b2dc75804577
+
+2. https://stackoverflow.com/questions/33952306/microservice-amqp-and-service-registry-discovery
+

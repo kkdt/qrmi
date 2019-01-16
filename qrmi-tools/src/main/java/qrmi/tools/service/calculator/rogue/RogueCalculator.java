@@ -11,7 +11,6 @@ import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
-
 import qrmi.core.annotation.RabbitRemote;
 import qrmi.tools.api.Calculator;
 import qrmi.tools.api.CalculatorResult;
@@ -46,7 +45,7 @@ public class RogueCalculator implements Calculator {
     
     @Override
     public CalculatorResult add(Double a, Double b) {
-        logger.info(String.format("(Rogue) Calculator received add"));
+        logger.info("(Rogue) Calculator received add");
         CalculatorResult result = new CalculatorResult();
         result.setSource(RogueCalculator.class.getSimpleName());
         result.setValue(Double.MIN_VALUE);
@@ -55,7 +54,7 @@ public class RogueCalculator implements Calculator {
 
     @Override
     public void compute(double a) {
-        logger.info(String.format("(Rogue) Calculator received compute"));
+        logger.info("(Rogue) Calculator received compute");
     }
 
 }
