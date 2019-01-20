@@ -18,6 +18,8 @@ The goal of this project is to provide service discovery over RabbitMQ using Spr
 
 4. https://www.rabbitmq.com/cluster-formation.html
 
+5. https://www.linkedin.com/learning/spring-spring-cloud/service-discovery-with-eureka
+
 ## Why RabbitMQ?
 
 1. Consumer-level load balancing
