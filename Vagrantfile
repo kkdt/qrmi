@@ -69,7 +69,7 @@ Vagrant.configure("2") do |config|
                 SHELL
             end
             
-            config.vm.provision "rabbitmq", type: "shell", args: [rabbit["vhost"], rabbit["cluster"]], inline: <<-SHELL
+            server.vm.provision "rabbitmq", type: "shell", args: [rabbit["vhost"], rabbit["cluster"]], inline: <<-SHELL
                 echo "Installing RabbitMQ"
                 sudo yum -y install rabbitmq-server
             
@@ -94,10 +94,6 @@ Vagrant.configure("2") do |config|
 
                 echo "Starting up rabbitmq-server"
                 sudo systemctl restart rabbitmq-server
-
-                rabbitmqctl stop_app
-                rabbitmqctl reset
-                rabbitmqctl start_app
 
                 if [ ! -z "$2" ]; then
                     echo "Setting up cluster to $2"
