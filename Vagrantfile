@@ -15,8 +15,8 @@ Vagrant.configure("2") do |config|
     config.ssh.forward_x11 = true
 
     config.vm.provision "bootstrap", type: "shell", inline: <<-SHELL
-        echo "Updating base"
-        sudo yum -y update
+        #echo "Updating base"
+        #sudo yum -y update
         
         echo "Installing Extra Package for Enterprise Linux (EPEL)"
         sudo yum -y install epel-release
@@ -28,10 +28,10 @@ Vagrant.configure("2") do |config|
         #sudo yum -y install wget unzip
         #sudo yum -y install mlocate unzip
         
-        echo "Finalizing updates"
-        sudo yum -y update
+        #echo "Finalizing updates"
+        #sudo yum -y update
     SHELL
-    
+
     Dir.glob('servers/*.json') do |file|
         json = (JSON.parse(File.read(file)))['server']
         id = json['id']
@@ -69,7 +69,7 @@ Vagrant.configure("2") do |config|
                 SHELL
             end
             
-            config.vm.provision "rabbitmq", type: "shell", args: [rabbit["vhost"]], inline: <<-SHELL
+            config.vm.provision "rabbitmq", type: "shell", args: [rabbit["vhost"], rabbit["cluster"]], inline: <<-SHELL
                 echo "Installing RabbitMQ"
                 sudo yum -y install rabbitmq-server
             
@@ -81,14 +81,38 @@ Vagrant.configure("2") do |config|
                 #sudo firewall-cmd --zone=public --add-port=5672/tcp --permanent
                 #sudo firewall-cmd --zone=public --add-port=15672/tcp --permanent
                 #sudo firewall-cmd --reload
-            
+
+                echo "Restarting RabbitMQ"
+                sudo systemctl restart rabbitmq-server
+                sudo systemctl stop rabbitmq-server
+
+                echo "Configuring /var/lib/rabbitmq/.erlang.cookie"
+                rm -f /var/lib/rabbitmq/.erlang.cookie
+                echo "AQKZMIKKNOZHFEENNNQF" > /var/lib/rabbitmq/.erlang.cookie
+                chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
+                chmod 400 /var/lib/rabbitmq/.erlang.cookie
+
                 echo "Starting up rabbitmq-server"
-                sudo systemctl start rabbitmq-server
-            
-                echo "Setting up virtual host: $1"
-                rabbitmqctl add_vhost $1
-                rabbitmqctl set_permissions -p $1 guest ".*" ".*" ".*"
+                sudo systemctl restart rabbitmq-server
+
+                rabbitmqctl stop_app
+                rabbitmqctl reset
+                rabbitmqctl start_app
+
+                if [ ! -z "$2" ]; then
+                    echo "Setting up cluster to $2"
+                    rabbitmqctl stop_app
+                    rabbitmqctl reset
+                    rabbitmqctl join_cluster $2
+                    rabbitmqctl start_app
+                    rabbitmqctl cluster_status
+                else
+                    echo "Setting up virtual host: $1"
+                    rabbitmqctl add_vhost $1
+                    rabbitmqctl set_permissions -p $1 guest ".*" ".*" ".*"
+                fi
             SHELL
         end
     end
+
 end
