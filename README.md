@@ -51,6 +51,7 @@ To facilitate service discovery, communication over RabbitMQ will be enforced by
 | qrmi-core     | [README](qrmi-core/README.md)   |
 | qrmi-tools    | [README](qrmi-tools/README.md)  |
 | qrmi          | [README](qrmi/README.md)        |
+| qregistry     | [README](qregistry/README.md)   |
 
 # Vagrant
 
@@ -62,11 +63,13 @@ Vagrant has two configured VMs:
     
     * RabbitMQ Management port `15672` (on host machine `6858`)
 
-2. qrmi2 with broker vhost `qrmiBroker2`
+2. qrmi2 clustered with qrmi1
 
     * RabbitMQ default port `5672` (on host machine `7859`)
     
     * RabbitMQ Management port `15672` (on host machine `7858`)
+
+3. Start up qrmi1 then qrmi2
 
 # Initial Thoughts
 

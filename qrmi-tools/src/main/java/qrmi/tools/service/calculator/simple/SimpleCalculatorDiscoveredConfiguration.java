@@ -11,6 +11,7 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import qrmi.api.QRMIRegistry;
 import qrmi.api.QRMIRegistryAware;
@@ -38,23 +39,30 @@ public class SimpleCalculatorDiscoveredConfiguration implements InitializingBean
     @Autowired
     private ConnectionFactory connectionFactory;
 
+    @Value("${qrmi.register:false}")
+    private Boolean doRegister;
+
     @Override
     public void afterPropertiesSet() throws Exception {
-        RabbitExporter exporter = new RabbitServiceBuilder(amqpAdmin, connectionFactory, registryBroadcast)
-            .build(calculator);
-        
-        StringBuilder b = new StringBuilder("All available service(s)");
-        registry.list().forEach(m -> {
-            b.append("\n    ").append(m);
-        });
-        logger.info(b.toString());
+        if(doRegister) {
+            logger.info("Registering calculator {} ", calculator.getClass().getName());
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            try {
-                registryBroadcast.serviceShutdown(RabbitServiceBuilder.createMetadata(exporter));
-            } catch (Exception e) {
-                logger.warn("Cannot notify service shutdown", e);
-            }
-        }));
+            RabbitExporter exporter = new RabbitServiceBuilder(amqpAdmin, connectionFactory, registryBroadcast)
+                .build(calculator);
+
+            StringBuilder b = new StringBuilder("All available service(s)");
+            registry.list().forEach(m -> {
+                b.append("\n    ").append(m);
+            });
+            logger.info(b.toString());
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    registryBroadcast.serviceShutdown(RabbitServiceBuilder.createMetadata(exporter));
+                } catch (Exception e) {
+                    logger.warn("Cannot notify service shutdown", e);
+                }
+            }));
+        }
     }
 }
