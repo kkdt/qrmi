@@ -6,7 +6,3 @@
 
 rootProject.name = 'qrmi'
 
-include 'qrmi-core'
-include 'qrmi-tools'
-include 'qrmi'
-include 'qregistry'

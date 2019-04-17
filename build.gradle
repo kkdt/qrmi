@@ -14,56 +14,39 @@ buildscript {
 }
 
 
-description = 'qrmi'
+description = 'RabbitMQ Remote Method Invocation'
 
 apply plugin: 'java-library'
-apply plugin: 'eclipse'
 
-eclipse {
-   classpath {
-      downloadJavadoc = true
-      downloadSources = true
-   }
-   
-   project {
-      resourceFilter {
-         appliesTo = 'FOLDERS'
-         type = 'EXCLUDE_ALL'
-         matcher {
-           id = 'org.eclipse.ui.ide.multiFilter'
-           arguments = '1.0-name-matches-false-false-build'
-         }
-       }
-   }
+version = '0.1'
+group = 'qrmi'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
 }
 
-allprojects { project ->
-    version = '0.1'
-    group = 'qrmi'
-    version = rootProject.version
-   
-    repositories {
-        mavenCentral()
-        mavenLocal()
+jar {
+    manifest {
+        attributes(
+            "Name": rootProject.name,
+            "Specification-Title": "qrmi",
+            "Specification-Version": rootProject.version,
+            "Specification-Vendor": "qrmi",
+            "Implementation-Title": rootProject.name,
+            "Implementation-Version": rootProject.version,
+            "Implementation-Vendor": "me@kkdt.one"
+        )
     }
 }
 
-subprojects { p ->
-    apply plugin: 'java'
-   
-    jar {
-        manifest {
-            attributes(
-                "Name": p.name,
-                "Specification-Title": "qrmi",
-                "Specification-Version": p.version,
-                "Specification-Vendor": "qrmi",
-                "Implementation-Title": p.name,
-                "Implementation-Version": p.version,
-                "Implementation-Vendor": "me@kkdt.one"
-            )
-        }
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-amqp:${amqpStarterVersion}") {
+        exclude module:'spring-boot-starter-tomcat'
+        exclude module:'spring-boot-starter-logging'
     }
-}
+    runtime("org.springframework.boot:spring-boot-starter-log4j2:${amqpStarterVersion}")
 
+    testImplementation 'junit:junit:4.12'
+}
 
