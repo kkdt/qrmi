@@ -106,6 +106,9 @@ Vagrant.configure("2") do |config|
                     echo "Setting up virtual host: $1"
                     rabbitmqctl add_vhost $1
                     rabbitmqctl set_permissions -p $1 guest ".*" ".*" ".*"
+
+                    echo "Creating initial set of exchanges"
+
                 fi
             SHELL
         end

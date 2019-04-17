@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -154,8 +153,7 @@ public abstract class RabbitExporter {
         Binding b;
         if(e instanceof FanoutExchange) {
             b = BindingBuilder.bind(q)
-                .to((DirectExchange)e)
-                .with(key);
+                .to((FanoutExchange)e);
             amqpAdmin.declareBinding(b);
         } else if (e instanceof TopicExchange) {
             b = BindingBuilder.bind(q)

@@ -5,8 +5,10 @@
  */
 package qrmi.tools;
 
+import com.rabbitmq.client.ShutdownSignalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionListener;
@@ -18,8 +20,6 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
-
-import com.rabbitmq.client.ShutdownSignalException;
 
 /**
  * Spring Boot application.
@@ -41,6 +41,9 @@ public class QRMITool implements InitializingBean, ConnectionListener {
     
     @Autowired
     private ConnectionFactory connectionFactory;
+
+    @Autowired
+    private AmqpAdmin amqpAdmin;
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -61,7 +64,7 @@ public class QRMITool implements InitializingBean, ConnectionListener {
     public void onShutDown(ShutdownSignalException signal) {
         logger.info("Connection shutdown on local port", signal);
     }
-    
+
     public static void main(String[] args) {
         DefaultApplicationArguments _args = new DefaultApplicationArguments(args);
         new SpringApplicationBuilder(QRMITool.class)

@@ -6,6 +6,7 @@
 package qrmi.support;
 
 import java.io.Serializable;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 
 /**
  * Rabbit Broker metadata.
@@ -15,6 +16,21 @@ import java.io.Serializable;
  */
 public class RabbitBrokerMetadata implements Serializable {
     private static final long serialVersionUID = -5253893992703458983L;
+
+    public static final class Builder {
+        private RabbitBrokerMetadata meta = new RabbitBrokerMetadata();
+
+        public Builder with(ConnectionFactory factory) {
+            meta.setHost(factory.getHost());
+            meta.setPort(factory.getPort());
+            meta.setVhost(factory.getVirtualHost());
+            return this;
+        }
+
+        public RabbitBrokerMetadata build() {
+            return meta;
+        }
+    }
     
     private String host = "localhost";
     private String vhost;

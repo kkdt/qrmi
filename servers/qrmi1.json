@@ -6,7 +6,10 @@
         "cpus": 1,
         "rabbitmq": {
             "vhost": "qrmiBroker1",
-            "cluster":""
+            "cluster":"",
+            "exchanges": [
+                {"name":""}
+            ]
         },
         "network" : {
             "type" : "private_network",

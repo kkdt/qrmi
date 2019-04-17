@@ -8,6 +8,7 @@ package qrmi.core;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.ExchangeTypes;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -179,7 +180,7 @@ public class RabbitExporterBuilder {
                         Boolean.valueOf(e.autoDelete()));
                     break;
                 default:
-                    exchange = new DirectExchange(e.name(), 
+                    exchange = new FanoutExchange(e.name(),
                         Boolean.valueOf(e.durable()),
                         Boolean.valueOf(e.autoDelete()));
                     break;

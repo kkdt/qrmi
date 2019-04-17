@@ -5,8 +5,11 @@
  */
 package qrmi.core;
 
+import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.remoting.RemoteProxyFailureException;
+import org.springframework.remoting.support.RemoteInvocation;
 
 /**
  * Locates a broadcast API exported to RabbitMQ.
@@ -23,5 +26,21 @@ public class RabbitConsumerLocator extends RabbitObjectLocator {
     @Override
     protected void locateObject() {
         // nothing special in this case
+    }
+
+    @Override
+    public Object invoke(MethodInvocation invocation) throws Throwable {
+        RemoteInvocation remoteInvocation = getRemoteInvocationFactory().createRemoteInvocation(invocation);
+        try {
+            if (getRoutingKey() == null) {
+                this.getAmqpTemplate().convertAndSend(remoteInvocation);
+            } else {
+                this.getAmqpTemplate().convertAndSend(getRoutingKey(), remoteInvocation);
+            }
+        } catch (Exception e) {
+            throw new RemoteProxyFailureException("Error broadcasting message", e);
+        }
+
+        return true;
     }
 }

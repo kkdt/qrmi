@@ -37,7 +37,7 @@ import qrmi.support.RabbitObjectMetadata;
             autoDelete = Exchange.TRUE,
             declare = Exchange.TRUE,
             durable = Exchange.TRUE,
-            exclusive = Exchange.TRUE),
+            exclusive = Exchange.FALSE),
         key = {"qrmi.api.QRMIRegistryAware"})
 )
 public class QServiceReceiver implements QRMIRegistryAware {

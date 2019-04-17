@@ -6,16 +6,18 @@
 package qrmi.tools.client.ui;
 
 import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.Assert;
 import qrmi.api.QRMIRegistry;
+import qrmi.core.RabbitExporterBuilder;
 import qrmi.core.RabbitRemoteLocator;
+import qrmi.support.ConnectionFactoryRegistryServiceListener;
 import qrmi.tools.api.Calculator;
-
-import java.util.UUID;
 
 /**
  * A client configuration for <code>QRMITool</code> to load, exposing remote APIs.
@@ -53,8 +55,16 @@ public class RemoteServicesConfiguration {
         remoteLocator.setRoutingKey(QRMIRegistry.class.getName());
         remoteLocator.setExchange("qrmi.service.registry");
         remoteLocator.setReplyTimeout(3000L);
-        remoteLocator.setReplyExchange("qrmi.reply");
-        remoteLocator.setReplyQueueNamingStrategy(() -> String.format("qrmi.%s.%s", applicationId, UUID.randomUUID().toString()));
+//        remoteLocator.setReplyExchange("qrmi.reply");
+//        remoteLocator.setReplyQueueNamingStrategy(() -> String.format("qrmi.%s.%s", applicationId, UUID.randomUUID().toString()));
         return remoteLocator;
+    }
+
+    @Bean
+    public ConnectionFactoryRegistryServiceListener registryServiceListener() {
+        Assert.isTrue(connectionFactory instanceof CachingConnectionFactory, "Expecting CachingConnectionFactory");
+        ConnectionFactoryRegistryServiceListener b = new ConnectionFactoryRegistryServiceListener((CachingConnectionFactory)connectionFactory);
+        new RabbitExporterBuilder(amqpAdmin, connectionFactory).build(b);
+        return b;
     }
 }

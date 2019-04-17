@@ -7,7 +7,7 @@
 package qrmi.api;
 
 import java.util.Date;
-import qrmi.support.RabbitObjectMetadata;
+import qrmi.support.RabbitBrokerMetadata;
 
 /**
  * The Service Registry will broadcast data per this API specification.
@@ -16,8 +16,8 @@ public interface QRMIRegistryListener extends QRMIBroadcast {
     /**
      * Registry broadcasts a heartbeat.
      *
-     * @param metadata
+     * @param broker the broker the registry currently exists on.
      * @param date
      */
-    void heartbeat(RabbitObjectMetadata metadata, Date date);
+    void heartbeat(RabbitBrokerMetadata broker, Date date);
 }
