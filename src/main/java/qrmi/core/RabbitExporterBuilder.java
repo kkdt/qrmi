@@ -18,7 +18,7 @@ import org.springframework.amqp.support.ConsumerTagStrategy;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
-import qrmi.core.annotation.RabbitConsumer;
+import qrmi.core.annotation.RabbitRemoteConsumer;
 import qrmi.core.annotation.RabbitRemote;
 
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class RabbitExporterBuilder {
             return this.build(remote, obj);
         }
         
-        RabbitConsumer consumer = AnnotationUtils.findAnnotation(obj.getClass(), RabbitConsumer.class);
+        RabbitRemoteConsumer consumer = AnnotationUtils.findAnnotation(obj.getClass(), RabbitRemoteConsumer.class);
         if(consumer != null) {
             return this.build(consumer, obj);
         }
@@ -139,9 +139,9 @@ public class RabbitExporterBuilder {
             });
     }
     
-    public RabbitExporter build(RabbitConsumer ann, Object obj) {
-        Assert.notNull(obj, "Bean of type RabbitConsumer cannot be null");
-        Assert.notNull(ann, "RabbitConsumer annotation cannot be null");
+    public RabbitExporter build(RabbitRemoteConsumer ann, Object obj) {
+        Assert.notNull(obj, "Bean of type RabbitRemoteConsumer cannot be null");
+        Assert.notNull(ann, "RabbitRemoteConsumer annotation cannot be null");
         
         return new RabbitConsumerExporter()
             .with(r -> r.name = ann.name())

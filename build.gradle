@@ -18,7 +18,7 @@ description = 'RabbitMQ Remote Method Invocation'
 
 apply plugin: 'java-library'
 
-version = '0.1'
+version = '0.2'
 group = 'qrmi'
 
 repositories {

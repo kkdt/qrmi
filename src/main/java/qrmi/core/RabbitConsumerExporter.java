@@ -33,6 +33,9 @@ public class RabbitConsumerExporter extends RabbitExporter {
         exporter.setService(remoteService);
         exporter.setAmqpTemplate(Optional.ofNullable(rabbitTemplate)
             .orElse(new RabbitTemplate(connectionFactory)));
+        if(messageConverter != null) {
+            exporter.setMessageConverter(messageConverter);
+        }
         return exporter;
     }
 

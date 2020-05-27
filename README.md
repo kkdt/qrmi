@@ -105,7 +105,7 @@ public RabbitRemoteLocator calculator() {
 
 ## Broadcast Style
 
-In a broadcast-style interaction, the binded remote object (i.e. the API implementation) will be the receiving end. The `RabbitConsumer` will be the annotation that facilitate this interaction.
+In a broadcast-style interaction, the binded remote object (i.e. the API implementation) will be the receiving end. The `RabbitRemoteConsumer` will be the annotation that facilitate this interaction.
 
 To reference the pub/sub pattern, implementations of a broadcast API will be subscribing to RabbitMQ for messages from publishers. Publishers, in this scenario, are any clients/services that have located the API over RabbitMQ and send messages via a stub/proxy reference to the remote API.
 
@@ -121,12 +121,12 @@ public interface Lottery {
 public class VirginiaLottery implements Lottery {...}
 ```
 
-### 2. Declare Implementation a `@RabbitConsumer`
+### 2. Declare Implementation a `@RabbitRemoteConsumer`
 
 Each implementation can be configured on the same RabbitMQ exchange with routing key specifications.
 
 ```java
-@RabbitConsumer(
+@RabbitRemoteConsumer(
     name = "Lottery",
     remoteInterface = Lottery.class,
     binding = @QueueBinding(
@@ -149,7 +149,7 @@ public class VirginiaLottery implements Lottery {...}
 ### 3. Bind the Subscribers/Implementations to RabbitMQ
 
 ```java
-// import the provided configuration to autodetect RabbitConsumer annotated classes in the application class path
+// import the provided configuration to autodetect RabbitRemoteConsumer annotated classes in the application class path
 
 @Configuration
 @Import(value = {RabbitExportConfiguration.class})
@@ -170,7 +170,7 @@ new RabbitExporterBuilder(amqpAdmin, connectionFactory)
 
 ### 5. Declare the Publishers
 
-Obtain a reference to the remote API via an extension of Spring `AmqpProxyFactoryBean`. The beans below will be broadcasting messages via API invocation and consumer implementation(s) that has the appropriate `@RabbitConsumer` configuration will be receiving the API-invoked broadcast.
+Obtain a reference to the remote API via an extension of Spring `AmqpProxyFactoryBean`. The beans below will be broadcasting messages via API invocation and consumer implementation(s) that has the appropriate `@RabbitRemoteConsumer` configuration will be receiving the API-invoked broadcast.
 
 ```java
 @Bean

@@ -21,11 +21,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.core.annotation.AnnotationUtils;
-import qrmi.core.annotation.RabbitConsumer;
+import qrmi.core.annotation.RabbitRemoteConsumer;
 import qrmi.core.annotation.RabbitRemote;
 
 /**
- * A configuration class that will look for all {@code RabbitRemote} and {@code RabbitConsumer} 
+ * A configuration class that will look for all {@code RabbitRemote} and {@code RabbitRemoteConsumer}
  * bean(s) and bind them to the underlying RabbitMQ interface.
  * 
  * <p>
@@ -65,10 +65,10 @@ public class RabbitExportConfiguration implements ApplicationListener<ContextSto
                 .build(AnnotationUtils.findAnnotation(AopUtils.getTargetClass(o), RabbitRemote.class), o))
         );
         
-        Map<String, Object> rabbitConsumers = applicationContext.getBeansWithAnnotation(RabbitConsumer.class);
+        Map<String, Object> rabbitConsumers = applicationContext.getBeansWithAnnotation(RabbitRemoteConsumer.class);
         rabbitConsumers.values().forEach(o -> 
             exported.add(remoteExport()
-                .build(AnnotationUtils.findAnnotation(AopUtils.getTargetClass(o), RabbitConsumer.class), o))
+                .build(AnnotationUtils.findAnnotation(AopUtils.getTargetClass(o), RabbitRemoteConsumer.class), o))
         );
         
         logger.info("Exporting {} Rabbit object(s)", exported.size());

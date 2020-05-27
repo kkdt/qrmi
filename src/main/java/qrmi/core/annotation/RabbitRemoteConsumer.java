@@ -15,7 +15,7 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>RabbitConsumer</code> identifies pub/sub-based API implementations 
+ * The <code>RabbitRemoteConsumer</code> identifies pub/sub-based API implementations
  * that may be invoked on RabbitMQ.
  * 
  * @author thinh ho
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface RabbitConsumer {
+public @interface RabbitRemoteConsumer {
     /**
      * Service name to be used for look up.
      * 
