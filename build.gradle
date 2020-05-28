@@ -4,19 +4,10 @@
  * See LICENSE at the project root directory.
  */
 
-buildscript {
-   repositories { 
-      mavenCentral()
-      maven {
-         url 'https://github.com/kkdt/mavenrepo/raw/master'
-      }
-   }
-}
-
-
 description = 'RabbitMQ Remote Method Invocation'
 
 apply plugin: 'java-library'
+apply plugin: 'maven'
 
 version = '0.2'
 group = 'qrmi'
