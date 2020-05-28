@@ -21,11 +21,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.core.annotation.AnnotationUtils;
-import qrmi.core.annotation.RabbitRemoteConsumer;
-import qrmi.core.annotation.RabbitRemote;
+import qrmi.core.annotation.RabbitRemoteBroadcast;
+import qrmi.core.annotation.RabbitRemoteService;
 
 /**
- * A configuration class that will look for all {@code RabbitRemote} and {@code RabbitRemoteConsumer}
+ * A configuration class that will look for all {@code RabbitRemoteService} and {@code RabbitRemoteBroadcast}
  * bean(s) and bind them to the underlying RabbitMQ interface.
  * 
  * <p>
@@ -59,16 +59,16 @@ public class RabbitExportConfiguration implements ApplicationListener<ContextSto
     
     @Override
     public void afterPropertiesSet() throws Exception {
-        Map<String, Object> rabbitRemotes = applicationContext.getBeansWithAnnotation(RabbitRemote.class);
+        Map<String, Object> rabbitRemotes = applicationContext.getBeansWithAnnotation(RabbitRemoteService.class);
         rabbitRemotes.values().forEach(o -> 
             exported.add(remoteExport()
-                .build(AnnotationUtils.findAnnotation(AopUtils.getTargetClass(o), RabbitRemote.class), o))
+                .build(AnnotationUtils.findAnnotation(AopUtils.getTargetClass(o), RabbitRemoteService.class), o))
         );
         
-        Map<String, Object> rabbitConsumers = applicationContext.getBeansWithAnnotation(RabbitRemoteConsumer.class);
+        Map<String, Object> rabbitConsumers = applicationContext.getBeansWithAnnotation(RabbitRemoteBroadcast.class);
         rabbitConsumers.values().forEach(o -> 
             exported.add(remoteExport()
-                .build(AnnotationUtils.findAnnotation(AopUtils.getTargetClass(o), RabbitRemoteConsumer.class), o))
+                .build(AnnotationUtils.findAnnotation(AopUtils.getTargetClass(o), RabbitRemoteBroadcast.class), o))
         );
         
         logger.info("Exporting {} Rabbit object(s)", exported.size());

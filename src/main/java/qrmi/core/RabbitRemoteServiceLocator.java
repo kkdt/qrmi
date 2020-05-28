@@ -17,13 +17,13 @@ import java.util.Objects;
  * @author thinh ho
  *
  */
-public class RabbitRemoteLocator extends RabbitObjectLocator {
+public class RabbitRemoteServiceLocator extends RabbitObjectLocator {
     private String replyExchange;
     private NamingStrategy replyQueueNamingStrategy = new Base64UrlNamingStrategy("qrmi.reply.");
     private SimpleMessageListenerContainer container;
     private Long replyTimeout = 5000L;
     
-    public RabbitRemoteLocator(AmqpAdmin amqpAdmin, ConnectionFactory connectionFactory) {
+    public RabbitRemoteServiceLocator(AmqpAdmin amqpAdmin, ConnectionFactory connectionFactory) {
         super(amqpAdmin, connectionFactory);
     }
     
