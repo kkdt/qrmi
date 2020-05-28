@@ -71,7 +71,8 @@ public class SimpleCalculator implements Calculator {...}
 
 
 ```java
-// import the provided configuration to autodetect RabbitRemoteService annotated classes in the application class path
+// import the provided configuration to autodetect RabbitRemoteService 
+// annotated classes in the application class path
 
 @Configuration
 @Import(value = {RabbitExportConfiguration.class})
