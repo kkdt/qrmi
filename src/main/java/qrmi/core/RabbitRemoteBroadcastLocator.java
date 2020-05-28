@@ -17,9 +17,9 @@ import org.springframework.remoting.support.RemoteInvocation;
  * @author thinh ho
  *
  */
-public class RabbitConsumerLocator extends RabbitObjectLocator {
+public class RabbitRemoteBroadcastLocator extends RabbitObjectLocator {
 
-    public RabbitConsumerLocator(AmqpAdmin amqpAdmin, ConnectionFactory connectionFactory) {
+    public RabbitRemoteBroadcastLocator(AmqpAdmin amqpAdmin, ConnectionFactory connectionFactory) {
         super(amqpAdmin, connectionFactory);
     }
 

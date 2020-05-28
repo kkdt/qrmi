@@ -18,8 +18,8 @@ import org.springframework.remoting.support.RemoteInvocationResult;
  *
  * @author thinh
  */
-public class RabbitConsumerMessageListener extends AmqpInvokerServiceExporter {
-    private static final Logger logger = LoggerFactory.getLogger(RabbitConsumerMessageListener.class);
+public class RabbitRemoteBroadcastMessageListener extends AmqpInvokerServiceExporter {
+    private static final Logger logger = LoggerFactory.getLogger(RabbitRemoteBroadcastMessageListener.class);
 
     @Override
     public void onMessage(Message message) {
