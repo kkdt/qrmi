@@ -4,21 +4,12 @@
  * See LICENSE at the project root directory.
  */
 
-buildscript {
-   repositories { 
-      mavenCentral()
-      maven {
-         url 'https://github.com/kkdt/mavenrepo/raw/master'
-      }
-   }
-}
-
-
 description = 'RabbitMQ Remote Method Invocation'
 
 apply plugin: 'java-library'
+apply plugin: 'maven'
 
-version = '0.1'
+version = '0.2'
 group = 'qrmi'
 
 repositories {
@@ -41,11 +32,9 @@ jar {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-amqp:${amqpStarterVersion}") {
-        exclude module:'spring-boot-starter-tomcat'
-        exclude module:'spring-boot-starter-logging'
-    }
-    runtime("org.springframework.boot:spring-boot-starter-log4j2:${amqpStarterVersion}")
+    compile("org.springframework.amqp:spring-rabbit:${amqpStarterVersion}")
+
+    implementation("log4j:log4j:1.2.17")
 
     testImplementation 'junit:junit:4.12'
 }

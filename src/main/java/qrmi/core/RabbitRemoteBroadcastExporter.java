@@ -18,7 +18,7 @@ import org.springframework.amqp.remoting.service.AmqpInvokerServiceExporter;
  * @author thinh ho
  *
  */
-public class RabbitConsumerExporter extends RabbitExporter {
+public class RabbitRemoteBroadcastExporter extends RabbitExporter {
     
     @Override
     protected boolean supportExchange(Exchange exchange) {
@@ -28,11 +28,14 @@ public class RabbitConsumerExporter extends RabbitExporter {
 
     @Override
     protected AmqpInvokerServiceExporter createMessageListener() {
-        AmqpInvokerServiceExporter exporter = new RabbitConsumerMessageListener();
+        AmqpInvokerServiceExporter exporter = new RabbitRemoteBroadcastMessageListener();
         exporter.setServiceInterface(remoteInterface);
         exporter.setService(remoteService);
         exporter.setAmqpTemplate(Optional.ofNullable(rabbitTemplate)
             .orElse(new RabbitTemplate(connectionFactory)));
+        if(messageConverter != null) {
+            exporter.setMessageConverter(messageConverter);
+        }
         return exporter;
     }
 

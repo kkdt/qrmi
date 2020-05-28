@@ -16,9 +16,9 @@ import java.util.Objects;
  * @author thinh ho
  *
  */
-public class RabbitRemoteExporter extends RabbitExporter {
+public class RabbitRemoteServiceExporter extends RabbitExporter {
     
-    public RabbitRemoteExporter() {}
+    public RabbitRemoteServiceExporter() {}
     
     @Override
     protected boolean supportExchange(Exchange exchange) {

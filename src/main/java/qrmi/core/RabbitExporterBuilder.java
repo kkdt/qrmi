@@ -18,8 +18,8 @@ import org.springframework.amqp.support.ConsumerTagStrategy;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
-import qrmi.core.annotation.RabbitConsumer;
-import qrmi.core.annotation.RabbitRemote;
+import qrmi.core.annotation.RabbitRemoteBroadcast;
+import qrmi.core.annotation.RabbitRemoteService;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -57,14 +57,14 @@ public class RabbitExporterBuilder {
      * @return the {@code RabbitExporter} or null.
      */
     public RabbitExporter build(Object obj) {
-        Assert.notNull(obj, "Bean of type RabbitRemote cannot be null");
+        Assert.notNull(obj, "Bean of type RabbitRemoteService cannot be null");
         
-        RabbitRemote remote = AnnotationUtils.findAnnotation(obj.getClass(), RabbitRemote.class);
+        RabbitRemoteService remote = AnnotationUtils.findAnnotation(obj.getClass(), RabbitRemoteService.class);
         if(remote != null) {
             return this.build(remote, obj);
         }
         
-        RabbitConsumer consumer = AnnotationUtils.findAnnotation(obj.getClass(), RabbitConsumer.class);
+        RabbitRemoteBroadcast consumer = AnnotationUtils.findAnnotation(obj.getClass(), RabbitRemoteBroadcast.class);
         if(consumer != null) {
             return this.build(consumer, obj);
         }
@@ -72,12 +72,12 @@ public class RabbitExporterBuilder {
         return null;
     }
     
-    public RabbitExporter build(RabbitRemote ann, Object obj) {
-        Assert.notNull(obj, "Bean of type RabbitRemote cannot be null");
-        Assert.notNull(ann, "RabbitRemote annotation cannot be null");
+    public RabbitExporter build(RabbitRemoteService ann, Object obj) {
+        Assert.notNull(obj, "Bean of type RabbitRemoteService cannot be null");
+        Assert.notNull(ann, "RabbitRemoteService annotation cannot be null");
         
         // bind the remote API to rabbit
-        return new RabbitRemoteExporter()
+        return new RabbitRemoteServiceExporter()
             .with(r -> r.name = ann.name())
             .with(r -> r.description = ann.description())
             .with(r -> r.applicationContext = applicationContext)
@@ -139,11 +139,11 @@ public class RabbitExporterBuilder {
             });
     }
     
-    public RabbitExporter build(RabbitConsumer ann, Object obj) {
-        Assert.notNull(obj, "Bean of type RabbitConsumer cannot be null");
-        Assert.notNull(ann, "RabbitConsumer annotation cannot be null");
+    public RabbitExporter build(RabbitRemoteBroadcast ann, Object obj) {
+        Assert.notNull(obj, "Bean of type RabbitRemoteBroadcast cannot be null");
+        Assert.notNull(ann, "RabbitRemoteBroadcast annotation cannot be null");
         
-        return new RabbitConsumerExporter()
+        return new RabbitRemoteBroadcastExporter()
             .with(r -> r.name = ann.name())
             .with(r -> r.description = ann.description())
             .with(r -> r.applicationContext = applicationContext)
