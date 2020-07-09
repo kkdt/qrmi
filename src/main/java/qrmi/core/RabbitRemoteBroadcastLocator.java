@@ -31,6 +31,7 @@ public class RabbitRemoteBroadcastLocator extends RabbitObjectLocator {
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
         RemoteInvocation remoteInvocation = getRemoteInvocationFactory().createRemoteInvocation(invocation);
+
         try {
             if (getRoutingKey() == null) {
                 this.getAmqpTemplate().convertAndSend(remoteInvocation);

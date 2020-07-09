@@ -10,6 +10,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.remoting.client.AmqpProxyFactoryBean;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.util.Assert;
 
 /**
@@ -86,6 +87,15 @@ public abstract class RabbitObjectLocator extends AmqpProxyFactoryBean {
      */
     public void setRoutingKey(String routingKey) {
         referenceTemplate.setRoutingKey(routingKey);
+    }
+
+    /**
+     * By default, the {@link org.springframework.amqp.support.converter.SimpleMessageConverter} is used.
+     *
+     * @param messageConverter
+     */
+    public void setMessageConverter(MessageConverter messageConverter) {
+        referenceTemplate.setMessageConverter(messageConverter);
     }
 
     @Override

@@ -175,8 +175,8 @@ Obtain a reference to the remote API via an extension of Spring `AmqpProxyFactor
 
 ```java
 @Bean
-public RabbitConsumerLocator vaLottery(AmqpAdmin amqpAdmin, ConnectionFactory connectionFactory) {
-    RabbitConsumerLocator l = new RabbitConsumerLocator(amqpAdmin, connectionFactory);
+public RabbitRemoteBroadcastLocator vaLottery(AmqpAdmin amqpAdmin, ConnectionFactory connectionFactory) {
+    RabbitRemoteBroadcastLocator l = new RabbitRemoteBroadcastLocator(amqpAdmin, connectionFactory);
     l.setServiceInterface(Lottery.class);
     l.setExchange("example.Lottery");
     l.setRoutingKey("Virginia");
@@ -184,8 +184,8 @@ public RabbitConsumerLocator vaLottery(AmqpAdmin amqpAdmin, ConnectionFactory co
 }
 
 @Bean
-public RabbitConsumerLocator mdLottery(AmqpAdmin amqpAdmin, ConnectionFactory connectionFactory) {
-    RabbitConsumerLocator l = new RabbitConsumerLocator(amqpAdmin, connectionFactory);
+public RabbitRemoteBroadcastLocator mdLottery(AmqpAdmin amqpAdmin, ConnectionFactory connectionFactory) {
+    RabbitRemoteBroadcastLocator l = new RabbitRemoteBroadcastLocator(amqpAdmin, connectionFactory);
     l.setServiceInterface(Lottery.class);
     l.setExchange("example.Lottery");
     l.setRoutingKey("Maryland");

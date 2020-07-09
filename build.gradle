@@ -33,6 +33,7 @@ jar {
 
 dependencies {
     compile("org.springframework.amqp:spring-rabbit:${amqpStarterVersion}")
+    compile("com.fasterxml.jackson.core:jackson-databind:2.10.4")
 
     implementation("log4j:log4j:1.2.17")
 
